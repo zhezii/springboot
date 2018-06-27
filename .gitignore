@@ -1,5 +1,10 @@
-/target/
-!.mvn/wrapper/maven-wrapper.jar
+.gradle
+/build/
+!gradle/wrapper/gradle-wrapper.jar
+gradle/
+# maven #
+target
+logs
 
 ### STS ###
 .apt_generated
@@ -15,10 +20,9 @@
 *.iws
 *.iml
 *.ipr
-/build/
-/.settings
-/.classpath
-/.project
+.idea/
+overlays
+bin
 
 ### NetBeans ###
 /nbproject/private/

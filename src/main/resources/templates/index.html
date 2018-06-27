@@ -3,20 +3,140 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>414个人信息</title>
+    <link rel="stylesheet" href="./bootstrap-3.3.7/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="./bootstrap-3.3.7/dist/css/bootstrap-theme.css">
 </head>
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+    }
+    .container{
+        margin: 10px auto;
+    }
+    .table{
+        border: 1px solid #ccc;
+    }
+    th,td {
+        height: 50px;
+        text-align: center;
+        vertical-align: middle !important;      
+        border: 1px solid #ccc;
+    }
+    th{
+        background: #DBDED9;
+    }
+    td a{
+        text-decoration: none;
+    }
+    .add{
+        margin-top: 50px;
+        text-align: right;
+    }
+    .add button{
+        display: inline-block;
+        width: 50px;
+        height: 30px;
+        background: #CBD3C3;
+        border: 0;
+        outline: none;
+        border-radius: 10px;
+    }
+</style>
 <body>
-<table border="1">
-    <tr>
-        <th>编号</th>
-        <th>用户名</th>
-        <th>密码</th>
-    </tr>
-    <tr th:each="user : ${list}" >
-        <th th:text="${user.id}"></th>
-        <th th:text="${user.username}"></th>
-        <th th:text="${user.password}"></th>
-    </tr>
-</table>
+    <div class="add table-responsive container">
+        <button  type="button" data-toggle="modal" data-target="#myModal">添加</button>
+    </div>
+    <div class="table-responsive container">
+        <table class="table">
+            <tr>
+                <th>姓名</th>
+                <th>年龄</th>
+                <th>地址</th>
+                <th>操作</th>
+            </tr>
+            <tr th:each="user : ${list}">
+                <td th:text="${user.username}"></td>
+                <td th:text="${user.age}"></td>
+                <td th:text="${user.address}"></td>
+                <td>
+                    <a href="#" data-toggle="modal" data-target="#myModal2">编辑</a>&nbsp;&nbsp;
+                    <a href="">删除</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    
+<!-- Modal1 -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title" id="myModalLabel">添加信息</h4>
+            </div>
+            <div class="modal-body">
+                <div class="content">
+                    <div>
+                        <label for="#name">姓名:</label>
+                        <input id="name" type="text">
+                    </div>
+                    <div style="margin: 10px 0;">
+                        <label for="#age">年龄:</label>
+                        <input id="age" type="text">
+                    </div>
+                    <div>
+                        <label for="#age">地址:</label>
+                        <input id="age" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+              <button type="button" class="btn btn-primary">添加</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal2 -->
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabe">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title" id="myModalLabel">添加信息</h4>
+            </div>
+            <div class="modal-body">
+                <div class="content">
+                    <div>
+                        <label for="#name">姓名:</label>
+                        <input id="name" type="text">
+                    </div>
+                    <div style="margin: 10px 0;">
+                        <label for="#age">年龄:</label>
+                        <input id="age" type="text">
+                    </div>
+                    <div>
+                        <label for="#age">地址:</label>
+                        <input id="address" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+              <button type="button" class="btn btn-primary">保存</button>
+            </div>
+          </div>
+        </div>
+      </div>
 </body>
+<script src="./js/jquery-1.11.0.min.js"></script>
+<script src="./bootstrap-3.3.7/dist/js/bootstrap.js"></script>
+<script>
+
+</script>
 </html>

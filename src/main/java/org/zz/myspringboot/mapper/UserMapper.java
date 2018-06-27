@@ -1,7 +1,6 @@
 package org.zz.myspringboot.mapper;
 
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import org.zz.myspringboot.entity.User;
 
 import java.util.List;
@@ -17,4 +16,13 @@ public interface UserMapper {
 
     @Select("select * from t_user")
     List<User> findAll();
+
+    //@Update("update t_user set username = #{username} where id = #{id}")
+    void update(@Param("id") Long id, @Param("username") String username,@Param("age") Integer age,@Param("password") String password);
+
+    @Insert("insert into t_user values(null,#{username},#{password})")
+    void add(@Param("username") String username, @Param("password") String password,@Param("age") Integer age);
+
+    @Delete("delete from t_user where id = #{id}")
+    void delete(Long id);
 }

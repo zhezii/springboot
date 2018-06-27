@@ -30,4 +30,19 @@ public class UserServiceImpl implements UserService {
 
         return userMapper.findAll();
     }
+
+    @Override
+    public void update(Long id, String username,Integer age,String password) {
+        userMapper.update(id,username,age,password);
+    }
+
+    @Override
+    public void add(String username,Integer age, String password) {
+        userMapper.add(username,password,age);
+    }
+
+    @Override
+    public void delete(Long id) {
+        userMapper.delete(id);
+    }
 }

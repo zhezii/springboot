@@ -12,4 +12,10 @@ public interface UserService {
     int findCountByUsername(String username);
 
     List<User> findAll();
+
+    void update(Long id, String username,Integer age,String address);
+
+    void add(String username,Integer age, String password);
+
+    void delete(Long id);
 }

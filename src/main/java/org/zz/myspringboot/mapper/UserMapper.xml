@@ -5,6 +5,10 @@
     <select id="countByUsername" resultType="java.lang.Integer">
       SELECT count(1) FROM t_user WHERE username = #{username}
     </select>
+    
+    <update id="update">
+        update t_user set username = #{username},age = #{age},address = #{password} where id = #{id}
+    </update>
 
 
 </mapper>

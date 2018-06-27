@@ -16,7 +16,18 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String username;
-    private String password;
+    private Integer age;
+    private String address;
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", age=" + age +
+                ", address='" + address + '\'' +
+                '}';
+    }
 
     public Long getId() {
         return id;
@@ -34,20 +45,19 @@ public class User {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
+    public Integer getAge() {
+        return age;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setAge(Integer age) {
+        this.age = age;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                '}';
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

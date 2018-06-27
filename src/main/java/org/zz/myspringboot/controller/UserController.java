@@ -25,16 +25,39 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("index")
-    public ModelAndView index(@Valid String username){
+    public ModelAndView findAll(){
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("index");
-        //根据用户名查询人数
-        int i = userService.findCountByUsername(username);
-        //查询所有用户信息
         List<User> list = userService.findAll();
         modelAndView.addObject("list",list);
-        modelAndView.addObject("count",i);
+        return modelAndView;
+    }
+
+    @GetMapping("/update")
+    public ModelAndView update(@Valid Long id,String username,Integer age,String address){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("success");
+        userService.update(id,username,age,address);
+        modelAndView.addObject("msg","修改成功");
+        return modelAndView;
+    }
+
+    @GetMapping("/add")
+    public ModelAndView add(@Valid String username,Integer age,String address){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("index");
+        userService.add(username,age,address);
+        modelAndView.addObject("msg","添加成功");
+        return modelAndView;
+    }
+
+    @GetMapping("/delete")
+    public ModelAndView delete(@Valid Long id){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("success");
+        userService.delete(id);
+        modelAndView.addObject("msg","删除成功");
         return modelAndView;
     }
 }

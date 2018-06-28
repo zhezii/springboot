@@ -1,15 +1,24 @@
 package org.zz.myspringboot.controller;
 
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.zz.myspringboot.entity.User;
 import org.zz.myspringboot.service.UserService;
+import org.zz.myspringboot.utils.FileUtil;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
@@ -64,9 +73,49 @@ public class UserController {
 
     @PostMapping("/findUser")
     public User update(Integer id){
-
-        ModelAndView modelAndView = new ModelAndView();
         User user =  userService.findUserById(id);
         return user;
     }
+
+    @RequestMapping("/importFile")
+    public void importFile(HttpServletResponse response){
+        List<User> userList = userService.findAll();
+        FileUtil.exportExcel(userList,"花名册","德玛西亚",User.class,"414.xls",response);
+
+    }
+
+    // 下载pdf文档
+    @RequestMapping("/download")
+    public void download(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        // 告诉浏览器用什么软件可以打开此文件
+        response.setHeader("content-Type", "application/pdf");
+        // 下载文件的默认名称
+        response.setHeader("Content-Disposition", "attachment;filename=414.pdf");
+
+        Document document = new Document();
+        PdfWriter.getInstance(document, response.getOutputStream());
+        document.open();
+        List<User> list = userService.findAll();
+        for (User user : list) {
+            PdfPTable table = new PdfPTable(3);
+            PdfPCell cell = new PdfPCell();
+            cell = new PdfPCell();
+            cell.setPhrase(new Paragraph(user.getUsername()));
+            table.addCell(cell);
+            document.add(table);
+
+            cell = new PdfPCell();
+            cell.setPhrase(new Paragraph(user.getAge().toString()));
+            table.addCell(cell);
+            document.add(table);
+
+            cell = new PdfPCell();
+            cell.setPhrase(new Paragraph(user.getAddress()));
+            table.addCell(cell);
+            document.add(table);
+        }
+        document.close();
+    }
+
+
 }

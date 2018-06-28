@@ -38,11 +38,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void add(String username,Integer age, String password) {
-        userMapper.add(username,password,age);
+        userMapper.add(username,age,password);
     }
 
     @Override
     public void delete(Long id) {
         userMapper.delete(id);
+    }
+
+    @Override
+    public User findUserById(Integer id) {
+        return userMapper.findUserById(id);
     }
 }

@@ -20,9 +20,12 @@ public interface UserMapper {
     //@Update("update t_user set username = #{username} where id = #{id}")
     void update(@Param("id") Long id, @Param("username") String username,@Param("age") Integer age,@Param("password") String password);
 
-    @Insert("insert into t_user values(null,#{username},#{password})")
-    void add(@Param("username") String username, @Param("password") String password,@Param("age") Integer age);
+    @Insert("insert into t_user values(null,#{username},#{age},#{password})")
+    void add(@Param("username") String username, @Param("age") Integer age,@Param("password") String password);
 
     @Delete("delete from t_user where id = #{id}")
     void delete(Long id);
+
+    @Select("select * from t_user where id = #{id}")
+    User findUserById(Integer id);
 }

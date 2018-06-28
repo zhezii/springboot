@@ -62,9 +62,10 @@
                 <td th:text="${user.username}"></td>
                 <td th:text="${user.age}"></td>
                 <td th:text="${user.address}"></td>
+                <!--th:onclick="'javascript:edit('+${user.id}+');'"-->
                 <td>
-                    <a href="#" data-toggle="modal" data-target="#myModal2">编辑</a>&nbsp;&nbsp;
-                    <a href="">删除</a>
+                    <a href="#" data-toggle="modal" data-target="#myModal2" th:onclick="'javascript:edit('+${user.id}+');'">编辑</a>&nbsp;&nbsp;
+                    <a href="#" th:href="@{/delete(id=${user.id})}">删除</a>
                 </td>
             </tr>
         </table>
@@ -76,27 +77,27 @@
           <div class="modal-content">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              <h4 class="modal-title" id="myModalLabel">添加信息</h4>
+              <h4 class="modal-title" id="myModalLabel1">添加信息</h4>
             </div>
             <div class="modal-body">
                 <div class="content">
                     <div>
-                        <label for="#name">姓名:</label>
+                        <label for="name">姓名:</label>
                         <input id="name" type="text">
                     </div>
                     <div style="margin: 10px 0;">
-                        <label for="#age">年龄:</label>
+                        <label for="age">年龄:</label>
                         <input id="age" type="text">
                     </div>
                     <div>
-                        <label for="#age">地址:</label>
-                        <input id="age" type="text">
+                        <label for="address">地址:</label>
+                        <input id="address" type="text">
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-              <button type="button" class="btn btn-primary">添加</button>
+              <button type="button" class="btn btn-primary" id="add">添加</button>
             </div>
           </div>
         </div>
@@ -108,27 +109,28 @@
           <div class="modal-content">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              <h4 class="modal-title" id="myModalLabel">添加信息</h4>
+              <h4 class="modal-title" id="myModalLabel2">添加信息</h4>
             </div>
             <div class="modal-body">
                 <div class="content">
+                    <input id="id2" type="hidden">
                     <div>
-                        <label for="#name">姓名:</label>
-                        <input id="name" type="text">
+                        <label for="name2">姓名:</label>
+                        <input id="name2" type="text">
                     </div>
                     <div style="margin: 10px 0;">
-                        <label for="#age">年龄:</label>
-                        <input id="age" type="text">
+                        <label for="age2">年龄:</label>
+                        <input id="age2" type="text">
                     </div>
                     <div>
-                        <label for="#age">地址:</label>
-                        <input id="address" type="text">
+                        <label for="address2">地址:</label>
+                        <input id="address2" type="text">
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-              <button type="button" class="btn btn-primary">保存</button>
+              <button type="button" class="btn btn-primary" id="save">保存</button>
             </div>
           </div>
         </div>
@@ -137,6 +139,63 @@
 <script src="./js/jquery-1.11.0.min.js"></script>
 <script src="./bootstrap-3.3.7/dist/js/bootstrap.js"></script>
 <script>
-
+    $("#add").click(function () {
+        var username=$("#name").val();
+        var age=$("#age").val();
+        var address=$("#address").val();
+        $.ajax({
+            type:"post",
+            url:"/add",
+            dataType:"json",
+            data:{
+                username:username,
+                age:age,
+                address:address
+            },
+            success:function(data){
+                if(data.success == 1){
+                    window.location.href="/index";
+                }
+            }
+        })
+    });
+    function edit(id) {
+        $.ajax({
+            type:"post",
+            url:"/findUser",
+            dataType:"json",
+            data: {
+                id:id
+            },
+            success:function (data) {
+                $("#id2").val(data.id);
+                $("#name2").val(data.username);
+                $("#age2").val(data.age);
+                $("#address2").val(data.address);
+            }
+        })
+    };
+    $("#save").click(function () {
+        var id=$("#id2").val();
+        var username=$("#name2").val();
+        var age=$("#age2").val();
+        var address=$("#address2").val();
+        $.ajax({
+            type:"post",
+            url:"/update",
+            dataType:"json",
+            data:{
+                id:id,
+                username:username,
+                age:age,
+                address:address
+            },
+            success:function(data){
+                if(data.success == 1){
+                    window.location.href="/index";
+                }
+            }
+        })
+    });
 </script>
 </html>

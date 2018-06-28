@@ -3,20 +3,24 @@ package org.zz.myspringboot.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.zz.myspringboot.entity.User;
 import org.zz.myspringboot.service.UserService;
 
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Zhou Wenzhe
  * @date 2018/6/27
  */
-@Controller
+//@Controller
+@RestController
 public class UserController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -34,30 +38,35 @@ public class UserController {
         return modelAndView;
     }
 
-    @GetMapping("/update")
-    public ModelAndView update(@Valid Long id,String username,Integer age,String address){
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("success");
+    @PostMapping("/update")
+    public Map update(@Valid Long id,String username,Integer age,String address){
         userService.update(id,username,age,address);
-        modelAndView.addObject("msg","修改成功");
-        return modelAndView;
+        Map map = new HashMap();
+        map.put("success",1);
+        return map;
     }
 
-    @GetMapping("/add")
-    public ModelAndView add(@Valid String username,Integer age,String address){
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("index");
+    @PostMapping("/add")
+    //@ResponseBody
+    public Map add(@Valid String username, Integer age, String address){
         userService.add(username,age,address);
-        modelAndView.addObject("msg","添加成功");
-        return modelAndView;
+        Map map = new HashMap();
+        map.put("success",1);
+        return map;
     }
 
     @GetMapping("/delete")
     public ModelAndView delete(@Valid Long id){
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("success");
+        ModelAndView modelAndView = new ModelAndView("redirect:/index");
         userService.delete(id);
-        modelAndView.addObject("msg","删除成功");
         return modelAndView;
+    }
+
+    @PostMapping("/findUser")
+    public User update(Integer id){
+
+        ModelAndView modelAndView = new ModelAndView();
+        User user =  userService.findUserById(id);
+        return user;
     }
 }

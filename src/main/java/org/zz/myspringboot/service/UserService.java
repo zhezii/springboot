@@ -18,4 +18,6 @@ public interface UserService {
     void add(String username,Integer age, String password);
 
     void delete(Long id);
+
+    User findUserById(Integer id);
 }

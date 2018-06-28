@@ -21,6 +21,7 @@ logs
 *.iml
 *.ipr
 .idea/
+.cmd
 overlays
 bin
 
@@ -31,3 +32,5 @@ bin
 /dist/
 /nbdist/
 /.nb-gradle/
+/mvnw
+/mvnw.cmd

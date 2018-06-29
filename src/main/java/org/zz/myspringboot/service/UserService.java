@@ -20,4 +20,6 @@ public interface UserService {
     void delete(Long id);
 
     User findUserById(Integer id);
+
+    List<User> findAll(Integer page, Integer pageSize);
 }

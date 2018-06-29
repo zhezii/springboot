@@ -1,5 +1,6 @@
 package org.zz.myspringboot.service.impl;
 
+import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,5 +50,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findUserById(Integer id) {
         return userMapper.findUserById(id);
+    }
+
+    @Override
+    public List<User> findAll(Integer page, Integer pageSize) {
+        if(page != null && pageSize != null){
+            PageHelper.startPage(page,pageSize);
+        }
+        return userMapper.findAll();
     }
 }

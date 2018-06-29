@@ -35,3 +35,4 @@ bin
 /mvnw
 /mvnw.cmd
 /.mvn/
+/target/

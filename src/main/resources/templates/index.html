@@ -8,6 +8,7 @@
     <title>414个人信息</title>
     <link rel="stylesheet" href="./bootstrap-3.3.7/dist/css/bootstrap.css">
     <link rel="stylesheet" href="./bootstrap-3.3.7/dist/css/bootstrap-theme.css">
+    <link rel="stylesheet" href="./css/layui.css"  media="all">
 </head>
 <style>
     *{
@@ -64,8 +65,7 @@
                 <td th:text="${user.username}"></td>
                 <td th:text="${user.age}"></td>
                 <td th:text="${user.address}"></td>
-                <!--th:onclick="'javascript:edit('+${user.id}+');'"-->
-                <td>
+                 <td>
                     <a href="#" data-toggle="modal" data-target="#myModal2" th:onclick="'javascript:edit('+${user.id}+');'">编辑</a>&nbsp;&nbsp;
                     <a href="#" th:href="@{/delete(id=${user.id})}">删除</a>
                 </td>
@@ -111,7 +111,7 @@
           <div class="modal-content">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              <h4 class="modal-title" id="myModalLabel2">添加信息</h4>
+              <h4 class="modal-title" id="myModalLabel2">修改信息</h4>
             </div>
             <div class="modal-body">
                 <div class="content">
@@ -136,10 +136,17 @@
             </div>
           </div>
         </div>
-      </div>
+</div>
+    <div class="page">
+        <div class="m-style M-box"></div>
+    </div>
 </body>
 <script src="./js/jquery-1.11.0.min.js"></script>
 <script src="./bootstrap-3.3.7/dist/js/bootstrap.js"></script>
+<script src="./js/layui.js" charset="utf-8"></script>
+<script src="./js/highlight.min.js" charset="utf-8"></script>
+<script src="./js/layui.js" charset="utf-8"></script>
+<script src="./js/bootstrap-paginator.js"></script>
 <script>
     $("#add").click(function () {
         var username=$("#name").val();
@@ -205,6 +212,69 @@
     $("#importPdf").click(function () {
         // window.location.href("/download");
         window.open("/download");
+    })
+</script>
+<script>
+    $(function(){
+        $('pre code').each(function(i, block) {
+            hljs.highlightBlock(block);
+        });
+        var pageSize = 5;
+        var dataCount, pageCount,currentPage;
+        $.ajax({
+            url: "/index1",
+            type: 'POST',
+            data: {
+                pageSize: pageSize,
+                pageNumber: 1
+            },
+            dataType: 'json',
+            cache: false,
+            success: function(datas) {
+                    var html = template('tpl', {
+                        list: datas.data.list,
+                    });
+                    $(className).html(html);
+                    pageOperation();
+                dataCount = datas.data.count;
+                pageCount = Math.ceil(dataCount / pageSize)
+                $(".showPage .pages").html(pageCount);
+                // pagination插件分页操作start
+                $('.M-box').pagination({
+                    pageCount: pageCount,
+                    coping: true,
+                    homePage: '首页',
+                    endPage: '末页',
+                    prevContent: '<< 上一页',
+                    nextContent: '下一页 >>',
+                    callback: function(api) {
+                        currentPage = api.getCurrent();
+                        $(".showPage .pageNum").html(currentPage);
+                        $.ajax({
+                            url: url,
+                            type: 'POST',
+                            data: {
+                                pageSize: pageSize,
+                                pageNumber: currentPage
+                            },
+                            dataType: 'json',
+                            cache: false,
+                            success: function(datas) {
+                                if(datas.result == 1) {
+                                    var html = template('tpl', {
+                                        list: datas.data.list
+                                    });
+                                    $(className).html(html);
+                                    pageOperation();
+                                }
+                            },
+
+                        })
+                    }
+                });
+            },
+
+        })
     })
 
 </script>

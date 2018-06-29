@@ -1,17 +1,15 @@
 package org.zz.myspringboot.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.itextpdf.text.Document;
-import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.zz.myspringboot.entity.User;
 import org.zz.myspringboot.service.UserService;
@@ -38,49 +36,50 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("index")
-    public ModelAndView findAll(){
-
+    public ModelAndView findAll(@Valid Integer page,Integer pageSize) {
+        page = 1;
+        pageSize = 10;
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("index");
-        List<User> list = userService.findAll();
-        modelAndView.addObject("list",list);
+        List<User> list1 = userService.findAll(page,pageSize);
+        modelAndView.addObject("list", list1);
         return modelAndView;
     }
 
     @PostMapping("/update")
-    public Map update(@Valid Long id,String username,Integer age,String address){
-        userService.update(id,username,age,address);
+    public Map update(@Valid Long id, String username, Integer age, String address) {
+        userService.update(id, username, age, address);
         Map map = new HashMap();
-        map.put("success",1);
+        map.put("success", 1);
         return map;
     }
 
     @PostMapping("/add")
     //@ResponseBody
-    public Map add(@Valid String username, Integer age, String address){
-        userService.add(username,age,address);
+    public Map add(@Valid String username, Integer age, String address) {
+        userService.add(username, age, address);
         Map map = new HashMap();
-        map.put("success",1);
+        map.put("success", 1);
         return map;
     }
 
     @GetMapping("/delete")
-    public ModelAndView delete(@Valid Long id){
+    public ModelAndView delete(@Valid Long id) {
         ModelAndView modelAndView = new ModelAndView("redirect:/index");
         userService.delete(id);
         return modelAndView;
     }
 
     @PostMapping("/findUser")
-    public User update(Integer id){
-        User user =  userService.findUserById(id);
+    public User update(Integer id) {
+        User user = userService.findUserById(id);
         return user;
     }
 
     @RequestMapping("/importFile")
-    public void importFile(HttpServletResponse response){
+    public void importFile(HttpServletResponse response) {
         List<User> userList = userService.findAll();
-        FileUtil.exportExcel(userList,"花名册","德玛西亚",User.class,"414.xls",response);
+        FileUtil.exportExcel(userList, "花名册", "德玛西亚", User.class, "414.xls", response);
 
     }
 
@@ -90,32 +89,44 @@ public class UserController {
         // 告诉浏览器用什么软件可以打开此文件
         response.setHeader("content-Type", "application/pdf");
         // 下载文件的默认名称
-        response.setHeader("Content-Disposition", "attachment;filename=414.pdf");
+        response.setHeader("Content-Disposition", "attachment;filename=user.pdf");
 
         Document document = new Document();
         PdfWriter.getInstance(document, response.getOutputStream());
         document.open();
+        BaseFont baseFont = BaseFont.createFont("C:/Windows/Fonts/SIMYOU.TTF",BaseFont.IDENTITY_H,BaseFont.NOT_EMBEDDED);
         List<User> list = userService.findAll();
         for (User user : list) {
             PdfPTable table = new PdfPTable(3);
             PdfPCell cell = new PdfPCell();
-            cell = new PdfPCell();
-            cell.setPhrase(new Paragraph(user.getUsername()));
+            cell.setPhrase(new com.itextpdf.text.Paragraph(user.getUsername()));
             table.addCell(cell);
             document.add(table);
 
             cell = new PdfPCell();
-            cell.setPhrase(new Paragraph(user.getAge().toString()));
+            cell.setPhrase(new com.itextpdf.text.Paragraph(user.getAge().toString()));
             table.addCell(cell);
             document.add(table);
 
             cell = new PdfPCell();
-            cell.setPhrase(new Paragraph(user.getAddress()));
+            cell.setPhrase(new com.itextpdf.text.Paragraph(user.getAddress()));
             table.addCell(cell);
             document.add(table);
         }
         document.close();
+
     }
 
+    @PostMapping("index1")
+    public PageInfo<User> findAll1(@Valid Integer page, Integer pageSize) {
+        page = 1;
+        pageSize = 2;
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("index");
+        List<User> list1 = userService.findAll(page,pageSize);
+        modelAndView.addObject("list", list1);
+        return new PageInfo<>(list1);
+    }
 
 }
+
